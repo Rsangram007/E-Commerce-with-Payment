@@ -38,6 +38,10 @@ const ProductSchema = new mongoose.Schema(
       required: true,
       default: 15,
     },
+    image: {
+      type: String,
+      default: '',
+    },
 
     user: {
       type: mongoose.Types.ObjectId,

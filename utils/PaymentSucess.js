@@ -20,7 +20,7 @@ const paymentSuccess = async (req, res, next) => {
   // Retrieve the order details from the database and populate 'user' and 'products'
   const order = await Order.findById(orderId)
     .populate("user", "name email")
-    .populate("products.product", "name price");
+    .populate("products.product", "name price image"); // Include 'image' field here
 
   if (!order) {
     return res.status(StatusCodes.NOT_FOUND).send({ msg: "Order not found" });
@@ -46,12 +46,21 @@ const paymentSuccess = async (req, res, next) => {
   // Generate the HTML with order details
   const orderDetailsHTML = order.products
     .map(
-      (p) => `<li>${p.product.name} - ${p.quantity} x $${p.product.price}</li>`
+      (p) => `
+      <li class="product-item">
+        <div class="product-image">
+          <img src="${p.product.image}" alt="${p.product.name}">
+        </div>
+        <div class="product-details">
+          <p><strong>${p.product.name}</strong></p>
+          <p>Quantity: ${p.quantity}</p>
+          <p>Price: $${p.product.price.toFixed(2)}</p>
+        </div>
+      </li>`
     )
     .join("");
 
   const html = `
-    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +72,7 @@ const paymentSuccess = async (req, res, next) => {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #ffcccc; /* light pink background */
+      background-color: #f2f2f2; /* Light gray background */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -71,11 +80,11 @@ const paymentSuccess = async (req, res, next) => {
     }
     .container {
       width: 80%;
-      max-width: 600px;
+      max-width: 800px;
       padding: 30px;
-      border-radius: 10px;
+      border-radius: 8px;
       background-color: #ffffff;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
     h1 {
       text-align: center;
@@ -91,16 +100,16 @@ const paymentSuccess = async (req, res, next) => {
     }
     .success-message i {
       font-size: 48px;
-      color: #33cc33; /* green color for success */
+      color: #33cc33; /* Green color for success */
       margin-right: 10px;
     }
     .order-box {
-      border: 2px solid #ff6600; /* orange border */
+      border: 2px solid #ff6600; /* Orange border */
       border-radius: 8px;
       padding: 20px;
-      background-color: #fff7e6; /* light orange background */
+      background-color: #fff7e6; /* Light orange background */
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
     .order-box p {
       margin-bottom: 10px;
@@ -114,7 +123,7 @@ const paymentSuccess = async (req, res, next) => {
     .order-box ul {
       list-style-type: none;
       padding-left: 0;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
     .order-box ul li {
       padding: 8px;
@@ -123,6 +132,28 @@ const paymentSuccess = async (req, res, next) => {
     }
     .order-box ul li:last-child {
       border-bottom: none;
+    }
+    .product-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .product-image {
+      flex: 0 0 30%;
+      max-width: 100px;
+      height: auto;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .product-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .product-details {
+      flex: 0 0 65%;
+      padding-left: 15px;
     }
     .contact-info {
       text-align: center;
@@ -134,7 +165,7 @@ const paymentSuccess = async (req, res, next) => {
       font-size: 16px;
     }
     .contact-info a {
-      color: #ff6600; /* orange color for links */
+      color: #ff6600; /* Orange color for links */
       text-decoration: none;
       font-weight: bold;
     }
@@ -151,7 +182,7 @@ const paymentSuccess = async (req, res, next) => {
       <p><span>Order ID:</span> ${order._id}</p>
       <p><span>User:</span> ${order.user.name} (${order.user.email})</p>
       <ul>
-        ${orderDetailsHTML} <!-- Assuming this is generated dynamically -->
+        ${orderDetailsHTML} 
       </ul>
       <p><span>Total:</span> $${order.totalAmount.toFixed(2)}</p>
     </div>
@@ -166,6 +197,3 @@ const paymentSuccess = async (req, res, next) => {
 };
 
 module.exports = paymentSuccess;
-
-
-
