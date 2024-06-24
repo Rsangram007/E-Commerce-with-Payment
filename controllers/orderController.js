@@ -166,14 +166,7 @@ const PayMentForOrder = async (req, res) => {
 
   const paymentSession = await checkoutSession2({ orderId: order._id });
 
-  // const payment = new Payment({
-  //   orderId: order._id,
-  //   paymentIntentId: paymentSession.id,
-  //   amount: order.totalAmount,
-  //   currency: "usd",
-  // });
-
-  // await payment.save();
+ 
 
   if (order.paymentStatus !== "completed") {
     order.paymentStatus = "completed";
@@ -183,8 +176,7 @@ const PayMentForOrder = async (req, res) => {
     order.orderStatus = "processing";
     await order.save();
   }
-  // payment.paymentStatus = "succeeded";
-  // await payment.save();  
+
   res
     .status(StatusCodes.OK)
     .json({ sessionId: paymentSession.id, url: paymentSession.url });

@@ -5,12 +5,6 @@ const path = require("path");
 
 const { cloudinary } = require("../utils/Cloud");
 // ** ===================  CREATE PRODUCT  ===================
-// const createProduct = async (req, res) => {
-//   req.body.user = req.user.userId
-//   const product = await Product.create(req.body)
-//   res.status(StatusCodes.CREATED).json({ product })
-
-// }
 
 const createProduct = async (req, res) => {
   req.body.user = req.user.userId;
