@@ -3,7 +3,7 @@ const Product = require("../models/productModel");
 const CustomError = require("../errors");
 const { StatusCodes } = require("http-status-codes");
 const { checkoutSession2 } = require("../utils/Service");
-// const Payment = require("../models/paymentModel");
+ 
 
 // ** ===================  GET ALL ORDERS  ===================
 const getAllOrders = async (req, res) => {
