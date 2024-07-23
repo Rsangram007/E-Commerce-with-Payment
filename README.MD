@@ -105,7 +105,7 @@ cvv : 453
 
 
 ```
-git clone https://github.com/Rsangram007/Ecommerce-With-Payment.git
+git clone https://github.com/Rsangram007/E-Commerce-with-Payment.git
 ```
 
 2. Navigate to the project directory.
